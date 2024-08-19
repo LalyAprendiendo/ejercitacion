@@ -1,4 +1,4 @@
-<h1 align="center">API REST - ASTRO DB</h1>
+<h1 align="center">API REST</h1>
 
 Desarrollar una API REST que permita interactuar con un sistema de registro de datos astrológicos de las personas. Al interactuar con la API se debe poder realizar las acciones detalladas más abajo, algunas de las cuales necesitan autorización especial. Para controlar el acceso a los recursos privados vamos a usar el sistema de autenticación por tokens.
 
