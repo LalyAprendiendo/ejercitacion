@@ -3,7 +3,7 @@ import { writeFile, readFile } from "jsonfile";
 class ProductsModel {
   static async write(data) {
     try {
-      await writeFile("./dist/database/products.json", data);
+      await writeFile("./src/database/products.json", data);
       return true;
     } catch (error) {
       throw error;
@@ -12,7 +12,7 @@ class ProductsModel {
 
   static async read() {
     try {
-      const db = await readFile("./dist/database/products.json");
+      const db = await readFile("./src/database/products.json");
       return db;
     } catch (error) {
       throw error;
