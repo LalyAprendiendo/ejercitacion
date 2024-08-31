@@ -15,25 +15,88 @@ class ProductsService {
     }
   }
 
-  static async create(product) {
+  static async create(product: { description: string; sellPrice: number }) {
     try {
-      await ProductsModel.write("parámetro");
+      const db = await ProductsModel.read();
+
+      const id = uuidv4();
+      const { description, sellPrice } = product;
+
+      const newProduct = {
+        id: id,
+        description: description,
+        sellPrice: sellPrice,
+      };
+      db.products.push(newProduct);
+
+      await ProductsModel.write(db);
+
+      return newProduct;
     } catch (error) {
       throw error;
     }
   }
 
-  static async update(id, data) {
+  static async updateById(
+    id: string,
+    data: { description: string; sellPrice: number }
+  ) {
     try {
-      await ProductsModel.write("parámetro");
+      const db = await ProductsModel.read();
+
+      let products = db.products.map((product) => {
+        if(product.id == id){ return {...product,...data}}
+        else return product
+      });
+
+      // if (!product) {
+      //   const error = new Error("Producto no encontrado");
+      //   error["statusCode"] = 404;
+
+      //   throw error;
+      // }
+
+      db.products = products
+
+      await ProductsModel.write(db);
     } catch (error) {
       throw error;
     }
   }
 
-  static async deleteProduct(id) {
+  static async deleteById(id: string) {
     try {
-      await ProductsModel.write("parámetro");
+      const db = await ProductsModel.read();
+      const products = db.products.filter((product) => product.id != id);
+
+      if (db.products.length == products.length) {
+        const error = new Error("Producto no encontrado");
+        error["statusCode"] = 404;
+
+        throw error;
+      }
+
+      db.products = products;
+
+      await ProductsModel.write(db);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getById(id: string) {
+    try {
+      const products = await ProductsService.getAllProducts({});
+
+      const product = products.find((product) => product.id == id);
+      if (!product) {
+        const error = new Error("Producto no encontrado");
+        error["statusCode"] = 404;
+
+        throw error;
+      }
+
+      return product;
     } catch (error) {
       throw error;
     }

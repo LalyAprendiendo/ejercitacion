@@ -4,18 +4,25 @@ import ProductsController from "../controllers/products";
 const productsRouter = Router();
 
 productsRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
-  ProductsController.getAllProducts(req, res, next);
+  ProductsController.getAll(req, res, next);
 });
+
+productsRouter.get("/:id", (req: Request, res: Response, next: NextFunction) => {
+  ProductsController.getById(req, res, next);
+});
+
 productsRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
   ProductsController.create(req, res, next);
 });
+
 productsRouter.patch("/:id", (req: Request, res: Response, next: NextFunction) => {
-  ProductsController.update(req, res, next);
+  ProductsController.updateById(req, res, next);
 });
+
 productsRouter.delete(
   "/:id",
   (req: Request, res: Response, next: NextFunction) => {
-    ProductsController.deleteProduct(req, res, next);
+    ProductsController.deleteById(req, res, next);
   }
 );
 

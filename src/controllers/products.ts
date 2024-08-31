@@ -1,10 +1,26 @@
 import { NextFunction, Request, Response } from "express";
+
 import ProductsService from "../services/products";
 
 class ProductsController {
-  static async getAllProducts(req: Request, res: Response, next: NextFunction) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      await ProductsService.getAllProducts(req.query);
+      // GET ==> /products?name=tornillo
+
+      // req.query == { name:"tornillo" }
+      const data = await ProductsService.getAllProducts;
+
+      res.status(200).json({ data: data })
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await ProductsService.getById(req.params.id);
+
+      res.status(200).json({ data: data })
     } catch (error) {
       next(error);
     }
@@ -12,23 +28,29 @@ class ProductsController {
 
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      await ProductsService.create(req.body);
+      const data = await ProductsService.create(req.body);
+
+      res.status(201).json({ data: data })
     } catch (error) {
       next(error);
     }
   }
 
-  static async update(req: Request, res: Response, next: NextFunction) {
+  static async updateById(req: Request, res: Response, next: NextFunction) {
     try {
-      await ProductsService.update(req.params.id, req.body);
+      await ProductsService.updateById(req.params.id, req.body);
+
+      res.status(200).json({ message: "Producto modificado con exito" })
     } catch (error) {
       next(error);
     }
   }
 
-  static async deleteProduct(req: Request, res: Response, next: NextFunction) {
+  static async deleteById(req: Request, res: Response, next: NextFunction) {
     try {
-      await ProductsService.deleteProduct(req.params.id);
+      await ProductsService.deleteById(req.params.id);
+
+      res.status(200).json({ message: "Producto eliminado con exito" })
     } catch (error) {
       next(error);
     }
