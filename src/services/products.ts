@@ -1,9 +1,15 @@
+import { v4 as uuidv4 } from "uuid";
 import ProductsModel from "../models/products";
 
 class ProductsService {
-  static async getAllProducts() {
+  static async getAllProducts(where) {
     try {
-      await ProductsModel.read();
+      const { products } = await ProductsModel.read();
+      if (!where.description) return products;
+      const productsFiltered = products.filter((product) =>
+        product.description.includes(where.description)
+      );
+      return productsFiltered;
     } catch (error) {
       throw error;
     }

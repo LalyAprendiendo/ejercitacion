@@ -4,7 +4,7 @@ import ProductsService from "../services/products";
 class ProductsController {
   static async getAllProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      await ProductsService.getAllProducts();
+      await ProductsService.getAllProducts(req.query);
     } catch (error) {
       next(error);
     }
