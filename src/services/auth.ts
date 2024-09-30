@@ -3,6 +3,8 @@ import UsersService from "./users";
 import { v4 as uuidv4 } from "uuid";
 import AuthModel from "../models/auth";
 import createHash from "../utils/create-hash";
+import { registerValidator } from "../schemas/register";
+import { loginValidator } from "../schemas/login";
 
 class AuthService {
   static async register(data: {
@@ -11,6 +13,9 @@ class AuthService {
     password: string;
   }) {
     try {
+      const result = registerValidator(data);
+      if (!result.success) throw new Error("Datos incorrectos");
+
       const userId = await UsersService.create({
         name: data.name,
         email: data.email,
@@ -32,6 +37,9 @@ class AuthService {
 
   static async login(data: { email; password }) {
     try {
+      const result = loginValidator(data);
+      if (!result.success) throw new Error("Datos incorrectos");
+      
       const user = await UsersService.getByEmail(data.email);
       const userAuth = await AuthService.getByUserId(user.id);
 

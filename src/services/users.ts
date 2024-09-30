@@ -1,10 +1,12 @@
 
 import UsersModel from "../models/users";
 import { v4 as uuidv4 } from "uuid";
+import { userValidator } from "../schemas/users";
 
 class UsersService {
   static async create(data: { name: string; email: string }) {
     try {
+      const result = userValidator(data)
       const usersDb = await UsersModel.read();
       const id = uuidv4();
       usersDb.users.push({ name: data.name, email: data.email, id: id });

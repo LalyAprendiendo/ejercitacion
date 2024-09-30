@@ -1,9 +1,16 @@
 import { v4 as uuidv4 } from "uuid";
 import ProductsModel from "../models/products";
+import { productValidator } from "../schemas/products";
+import { string } from "zod";
+import { json } from "stream/consumers";
+
 
 class ProductsService {
   static async getAllProducts(where) {
     try {
+      const result = productValidator({data: string});
+      if (!result.success) throw new Error("Datos incorrectos");
+
       const { products } = await ProductsModel.read();
       if (!where.description) return products;
       const productsFiltered = products.filter((product) =>
@@ -17,6 +24,9 @@ class ProductsService {
 
   static async create(product: { description: string; sellPrice: number }) {
     try {
+      const result = productValidator(product);
+      if (!result.success) throw new Error(JSON.stringify(result.error.issues));
+
       const db = await ProductsModel.read();
 
       const id = uuidv4();
